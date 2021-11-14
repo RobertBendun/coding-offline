@@ -1,0 +1,24 @@
+#/usr/bin/env bash
+
+set -e
+
+Mirror="mirror-cppreference"
+Address="https://en.cppreference.com/w/"
+Name="C++ Reference"
+Destination="/var/www/cppreference/"
+
+if [ -d "$Mirror" ]; then
+	echo "$Name mirror already exists"
+	echo "If you want to refresh mirror remove '$Mirror' directory"
+else
+	echo "Mirroring $Name"
+	mkdir -p "$Mirror"
+	pushd "$Mirror"
+	wget --mirror --convert-links --adjust-extension --page-requisites --no-parent --no-verbose "$Address" --no-host-directory
+	popd
+fi
+
+mkdir -p "$Destination"
+
+cp -r "$Mirror"/* "$Destination/"
+chmod -R 755 "$Destination"

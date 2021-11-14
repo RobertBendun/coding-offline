@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+for conf in nginx/*.conf; do
+	# TODO check if already exists
+	cp -f "$conf" /etc/nginx/sites-available/
+	ln -sf "/etc/nginx/sites-available/$(basename "$conf")" "/etc/nginx/sites-enabled/"
+done
+
+systemctl reload nginx
